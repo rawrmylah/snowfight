@@ -22,11 +22,6 @@ export default class Server extends EventEmitter {
 		};
 	}
 	send(data) {
-		this.ws.send(
-			JSON.stringify({
-				...data,
-				author: this.id,
-			})
-		);
+		this.ws.send(JSON.stringify(data));
 	}
 }

@@ -8,7 +8,7 @@ import Game from "./src/game.js";
 const game = new Game();
 
 app.ws("/ws", (ws, req) => {
-	var player = game.addPlayer(ws);
+	game.waitJoin(ws);
 });
 
 app.listen(process.env.PORT, null, () => {

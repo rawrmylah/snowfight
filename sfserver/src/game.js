@@ -14,30 +14,47 @@ export default class Game {
 		}
 	}
 
-	addPlayer(ws) {
-		const player = new Player(ws, this.playerMaxId++);
+	waitJoin(ws) {
+		console.log("waiting for join message");
+		ws.once("message", (msg) => {
+			var obj = JSON.parse(msg);
+			if (obj.event == "join") this.addPlayer(ws, obj.name, obj.color);
+		});
+	}
+
+	addPlayer(ws, name, color) {
+		const player = new Player(ws, this.playerMaxId++, name, color);
+		console.log("adding player " + name + " with id " + player.id);
 		this.players[player.id] = player;
 
 		player.send({
-			event: "self_join",
+			event: "acknowledge_join",
 			id: player.id,
-			name: "player" + player.id,
-			color: 0xff0000,
-			others: Object.keys(this.players),
 		});
 
-		sendToAll(
+		for (var key in this.players) {
+			player.send({
+				event: "new_player",
+				id: this.players[key].id,
+				name: this.players[key].name,
+				color: this.players[key].color,
+			});
+		}
+
+		this.sendToAll(
 			{
 				event: "new_player",
 				id: player.id,
+				name: player.name,
+				color: player.color,
 			},
 			(p) => p.id != player.id
 		);
 
-		// distribute incoming messages to all other players
 		player.onReceive((msg) => {
+			msg.author = player.id;
 			console.log("received message from player " + player.id, msg);
-			game.sendToAll(msg, (p) => p.id != player.id);
+			this.sendToAll(msg, (p) => p.id != player.id);
 		});
 
 		player.onDisconnect((req) => {
@@ -45,7 +62,7 @@ export default class Game {
 			delete this.players[player.id];
 
 			// send leave message to all other players
-			sendToAll({
+			this.sendToAll({
 				action: "leave",
 				id: player.id,
 			});

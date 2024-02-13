@@ -17,7 +17,28 @@ export default class Player {
 }
 
 export class SelfPlayer extends Player {
-	constructor(id, name, color) {
+	constructor(id, name, color, control, game) {
 		super(id, name, color);
+		this.control = control;
+		this.game = game;
+
+		this.#init();
+	}
+	#init() {
+		this.game.on("gameTick", () => {
+			const moveX = this.control.getMoveX() * 0.1;
+			const moveY = this.control.getMoveY() * 0.1;
+			this.visual.position.x += moveX;
+			this.visual.position.y += moveY;
+			if (moveX || moveY) {
+				this.game.server.send({
+					event: "update_position",
+					position: {
+						x: this.visual.position.x,
+						y: this.visual.position.y,
+					},
+				});
+			}
+		});
 	}
 }

@@ -1,7 +1,9 @@
 export default class Player {
-	constructor(ws, playerId) {
+	constructor(ws, playerId, name, color) {
 		this.ws = ws;
 		this.id = playerId;
+		this.name = name;
+		this.color = color;
 	}
 
 	send(obj) {

@@ -1,0 +1,3 @@
+Client Connects to WS -> 
+Server add client to a list and waits for init packet ->
+Client sends own data to server (name, color) ->

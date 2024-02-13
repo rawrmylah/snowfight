@@ -5,21 +5,28 @@ import Server from "./server";
 import Game from "./game";
 import Scene from "./scene";
 import Player from "./player";
+import Control from "./control";
 
+const control = new Control();
 const scene = new Scene();
 const server = new Server();
-const game = new Game(server, scene);
+const game = new Game(server, scene, control);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// const testPlayer = new Player(0, "test", 0x00ff00);
-// scene.add(testPlayer.visual);
+document.getElementById("joinButton").addEventListener("click", () => {
+	const name = document.getElementById("playerName").value;
+	const color = document.getElementById("playerColor").value;
+	document.getElementById("menu").style.display = "none";
+
+	game.join(name, color);
+});
 
 function animate() {
 	requestAnimationFrame(animate);
-
+	game.gameTick();
 	renderer.render(scene, scene.camera);
 }
 
