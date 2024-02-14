@@ -1,14 +1,16 @@
 import { SelfPlayer } from "./player";
 import Player from "./player";
 import EventEmitter from "events";
+import Snowball from "./snowball";
 
 export default class Game extends EventEmitter {
 	constructor(server, scene, control) {
 		super();
 		this.players = {};
+		this.snowballs = {};
+		this.selfId = null;
 		this.server = server;
 		this.scene = scene;
-		this.selfId = null;
 		this.control = control;
 		this.#init();
 	}
@@ -25,6 +27,24 @@ export default class Game extends EventEmitter {
 		this.server.on("update_position", (msg) => {
 			console.log(msg);
 			this.players[msg.author].setPosition(msg.position.x, msg.position.y);
+		});
+		this.server.on("snowball", (msg) => {
+			console.log(msg);
+			if (this.snowballs[msg.id]) {
+				console.log("updating existing snowball");
+				this.snowballs[msg.id].setPosition(msg.position);
+				this.snowballs[msg.id].setVelocity(msg.velocity);
+			} else {
+				console.log("creating new snowball");
+				this.snowballs[msg.id] = new Snowball(
+					msg.position,
+					msg.velocity,
+					msg.author,
+					msg.id,
+					this
+				);
+				this.scene.add(this.snowballs[msg.id].visual);
+			}
 		});
 	}
 	#addPlayer(id, name, color) {
@@ -47,5 +67,25 @@ export default class Game extends EventEmitter {
 	}
 	gameTick() {
 		this.emit("gameTick");
+	}
+	throwSnowball() {
+		this.server.send({
+			event: "snowball",
+			position: {
+				x: this.players[this.selfId].visual.position.x,
+				y: this.players[this.selfId].visual.position.y,
+				z: 1, //TODO CHANGE LATER
+			},
+			velocity: {
+				x: 0.2,
+				y: 0.2,
+				z: 0.2,
+			},
+		});
+	}
+	destroySnowball(snowball) {
+		this.scene.remove(this.visual);
+		snowball.destroy();
+		delete this.snowballs[snowball.id];
 	}
 }

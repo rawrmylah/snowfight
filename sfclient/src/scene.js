@@ -9,6 +9,7 @@ export default class Scene extends THREE.Scene {
 			0.1,
 			1000
 		);
-		this.camera.position.z = 5;
+		this.camera.isometric = true;
+		this.camera.position.z = 25;
 	}
 }

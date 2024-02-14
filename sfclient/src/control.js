@@ -6,6 +6,7 @@ const keyMap = {
 	s: "down",
 	d: "right",
 	" ": "jump",
+	arrowleft: "throw",
 };
 
 export default class Control extends EventEmitter {
@@ -14,6 +15,7 @@ export default class Control extends EventEmitter {
 		this.currentlyPressedKeys = {};
 		document.addEventListener("keydown", (event) => {
 			const key = event.key.toLowerCase();
+			console.log(key);
 			if (!keyMap[key]) return;
 
 			this.currentlyPressedKeys[keyMap[key]] = true;

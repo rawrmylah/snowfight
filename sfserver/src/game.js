@@ -4,6 +4,8 @@ export default class Game {
 	constructor() {
 		this.players = {};
 		this.playerMaxId = 0;
+		this.snowballMaxId = 0;
+		this.snowballs = {};
 	}
 
 	sendToAll(msg, filter = () => true) {
@@ -54,7 +56,15 @@ export default class Game {
 		player.onReceive((msg) => {
 			msg.author = player.id;
 			console.log("received message from player " + player.id, msg);
-			this.sendToAll(msg, (p) => p.id != player.id);
+			if ([].includes(msg.event)) {
+				this.sendToAll(msg);
+			} else if (msg.event === "snowball") {
+				msg.snowballId = this.snowballMaxId++;
+				this.snowballs[msg.snowballId] = msg;
+				this.sendToAll(msg);
+			} else {
+				this.sendToAll(msg, (p) => p.id != player.id);
+			}
 		});
 
 		player.onDisconnect((req) => {
@@ -64,7 +74,7 @@ export default class Game {
 			// send leave message to all other players
 			this.sendToAll({
 				action: "leave",
-				id: player.id,
+				author: player.id,
 			});
 		});
 

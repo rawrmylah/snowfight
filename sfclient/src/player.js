@@ -6,7 +6,8 @@ export default class Player {
 		this.name = name;
 		this.color = color;
 
-		this.geometry = new THREE.BoxGeometry(1, 1, 1);
+		this.geometry = new THREE.CylinderGeometry(1, 1, 2);
+		this.geometry.rotateX(Math.PI / 2);
 		this.material = new THREE.MeshBasicMaterial({ color: this.color });
 		this.visual = new THREE.Mesh(this.geometry, this.material);
 	}
@@ -39,6 +40,10 @@ export class SelfPlayer extends Player {
 					},
 				});
 			}
+		});
+		this.control.on("throw", () => {
+			console.log("throw");
+			this.game.throwSnowball();
 		});
 	}
 }
