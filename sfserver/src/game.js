@@ -55,12 +55,15 @@ export default class Game {
 
 		player.onReceive((msg) => {
 			msg.author = player.id;
-			console.log("received message from player " + player.id, msg);
+			if (msg.event !== "update_position") {
+				console.log("received message from player " + player.id, msg);
+			}
 			if ([].includes(msg.event)) {
 				this.sendToAll(msg);
 			} else if (msg.event === "snowball") {
-				msg.snowballId = this.snowballMaxId++;
-				this.snowballs[msg.snowballId] = msg;
+				msg.id = this.snowballMaxId++;
+				console.log("snowball id", msg);
+				this.snowballs[msg.id] = msg;
 				this.sendToAll(msg);
 			} else {
 				this.sendToAll(msg, (p) => p.id != player.id);
