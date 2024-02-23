@@ -13,7 +13,6 @@ export default class Server extends EventEmitter {
 		};
 		this.ws.onmessage = (event) => {
 			const message = JSON.parse(event.data);
-			console.log("received message from server", message);
 			this.emit(message.event, message);
 		};
 		this.ws.onclose = () => {

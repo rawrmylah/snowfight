@@ -8,7 +8,7 @@ export default class Player {
 
 		this.geometry = new THREE.CylinderGeometry(1, 1, 2);
 		this.geometry.rotateX(Math.PI / 2);
-		this.material = new THREE.MeshBasicMaterial({ color: this.color });
+		this.material = new THREE.MeshPhongMaterial({ color: this.color });
 		this.visual = new THREE.Mesh(this.geometry, this.material);
 	}
 	setPosition(x, y) {
@@ -41,9 +41,8 @@ export class SelfPlayer extends Player {
 				});
 			}
 		});
-		this.control.on("throw", () => {
-			console.log("throw");
-			this.game.throwSnowball();
+		this.control.on("throw", (speed) => {
+			this.game.throwSnowball(speed);
 		});
 	}
 }

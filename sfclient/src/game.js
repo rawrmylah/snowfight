@@ -29,13 +29,10 @@ export default class Game extends EventEmitter {
 			this.players[msg.author].setPosition(msg.position.x, msg.position.y);
 		});
 		this.server.on("snowball", (msg) => {
-			console.log(msg);
 			if (this.snowballs[msg.id]) {
-				console.log("updating existing snowball");
 				this.snowballs[msg.id].setPosition(msg.position);
 				this.snowballs[msg.id].setVelocity(msg.velocity);
 			} else {
-				console.log("creating new snowball");
 				this.snowballs[msg.id] = new Snowball(
 					msg.position,
 					msg.velocity,
@@ -65,10 +62,11 @@ export default class Game extends EventEmitter {
 			color: color,
 		});
 	}
-	gameTick() {
-		this.emit("gameTick");
+	gameTick(timeDt) {
+		this.emit("gameTick", timeDt);
 	}
-	throwSnowball() {
+	throwSnowball(speed) {
+		console.log(speed);
 		this.server.send({
 			event: "snowball",
 			position: {
@@ -77,9 +75,9 @@ export default class Game extends EventEmitter {
 				z: 1, //TODO CHANGE LATER
 			},
 			velocity: {
-				x: 0.2,
-				y: 0.2,
-				z: 0.2,
+				x: speed,
+				y: speed,
+				z: speed,
 			},
 		});
 	}

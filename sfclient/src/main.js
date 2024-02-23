@@ -14,6 +14,7 @@ const game = new Game(server, scene, control);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
 document.getElementById("joinButton").addEventListener("click", () => {
@@ -24,9 +25,15 @@ document.getElementById("joinButton").addEventListener("click", () => {
 	game.join(name, color);
 });
 
+let lastTime = new Date().getTime();
 function animate() {
 	requestAnimationFrame(animate);
-	game.gameTick();
+
+	const currentTime = new Date().getTime();
+	const dt = currentTime - lastTime;
+	lastTime = currentTime;
+	game.gameTick(dt / 1000);
+
 	renderer.render(scene, scene.camera);
 }
 
