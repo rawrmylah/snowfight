@@ -7,7 +7,7 @@ export default class Snowball {
 		this.game = game;
 		this.id = id;
 
-		this.geometry = new THREE.SphereGeometry(1, 32, 32);
+		this.geometry = new THREE.SphereGeometry(0.4, 32, 32);
 		this.material = new THREE.MeshPhongMaterial({ color: 0xffffff });
 		this.visual = new THREE.Mesh(this.geometry, this.material);
 
@@ -20,11 +20,10 @@ export default class Snowball {
 		this.game.on("gameTick", this.handler);
 	}
 	#tick(timeDt) {
-		console.log(timeDt);
 		this.visual.position.x += this.velocity.x * timeDt;
 		this.visual.position.y += this.velocity.y * timeDt;
 		this.visual.position.z += this.velocity.z * timeDt;
-		this.velocity.z -= 0.01 * timeDt;
+		this.velocity.z -= 5 * timeDt;
 		if (this.visual.position.z < 0) {
 			this.game.destroySnowball(this);
 		}

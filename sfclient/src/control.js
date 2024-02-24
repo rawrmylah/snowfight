@@ -29,7 +29,7 @@ export default class Control extends EventEmitter {
 			if (keyMap[key] === "throw") {
 				this.emit(
 					"throw",
-					getSpeed(new Date().getTime() - this.currentlyPressedKeys["throw"])
+					getPower(new Date().getTime() - this.currentlyPressedKeys["throw"])
 				);
 			}
 
@@ -51,6 +51,6 @@ export default class Control extends EventEmitter {
 	}
 }
 
-function getSpeed(timeDt) {
-	return Math.min(0.5, timeDt / 3000 + 0.1);
+function getPower(timeDt) {
+	return Math.min(1, timeDt / 1000);
 }

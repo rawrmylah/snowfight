@@ -16,13 +16,19 @@ export default class Scene extends THREE.Scene {
 		this.add(light);
 
 		const light2 = new THREE.DirectionalLight(0xf0f0f0, 1.5);
-		light2.position.set(10, 10, 10);
+		light2.position.set(5, 5, 10);
 		light2.castShadow = true; // enable shadow casting for the directional light
 		light2.shadow.mapSize.width = 2048; // default
 		light2.shadow.mapSize.height = 2048; // default
 		light2.shadow.camera.near = 0.5; // default
-		light2.shadow.camera.far = 500; // default
+		light2.shadow.camera.far = 50; // default
+		light2.shadow.camera.left = -30;
+		light2.shadow.camera.right = 30;
+		light2.shadow.camera.top = 30;
+		light2.shadow.camera.bottom = -30;
 		this.add(light2);
+
+		this.add(new THREE.CameraHelper(light2.shadow.camera));
 
 		this.traverse(function (object) {
 			if (object.isMesh) {
@@ -36,7 +42,7 @@ export default class Scene extends THREE.Scene {
 		const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
 		const plane = new THREE.Mesh(geometry, material);
 		// plane.rotateX(Math.PI / 2);
-		plane.position.z = -1;
+		plane.position.z = 0;
 		plane.receiveShadow = true;
 		this.add(plane);
 	}

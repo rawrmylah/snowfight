@@ -65,20 +65,32 @@ export default class Game extends EventEmitter {
 	gameTick(timeDt) {
 		this.emit("gameTick", timeDt);
 	}
-	throwSnowball(speed) {
-		console.log(speed);
+	throwSnowball(power, directionAngle, elevationAngle) {
+		power = Math.min(1, power + 0.3);
+		const powerFactor = 20;
+		const velocity = {
+			x:
+				powerFactor *
+				power *
+				Math.cos(directionAngle) *
+				Math.cos(elevationAngle),
+			y:
+				powerFactor *
+				power *
+				Math.sin(directionAngle) *
+				Math.cos(elevationAngle),
+			z: powerFactor * power * Math.sin(elevationAngle),
+		};
 		this.server.send({
 			event: "snowball",
 			position: {
 				x: this.players[this.selfId].visual.position.x,
 				y: this.players[this.selfId].visual.position.y,
-				z: 1, //TODO CHANGE LATER
+				z:
+					this.players[this.selfId].visual.position.z +
+					this.players[this.selfId].visual.geometry.parameters.height / 2,
 			},
-			velocity: {
-				x: speed,
-				y: speed,
-				z: speed,
-			},
+			velocity,
 		});
 	}
 	destroySnowball(snowball) {

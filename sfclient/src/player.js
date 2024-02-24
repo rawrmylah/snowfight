@@ -41,8 +41,8 @@ export class SelfPlayer extends Player {
 				});
 			}
 		});
-		this.control.on("throw", (speed) => {
-			this.game.throwSnowball(speed);
+		this.control.on("throw", (power) => {
+			this.game.throwSnowball(power, 0, (45 / 180) * Math.PI);
 		});
 	}
 }
