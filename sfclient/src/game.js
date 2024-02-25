@@ -66,8 +66,8 @@ export default class Game extends EventEmitter {
 		this.emit("gameTick", timeDt);
 	}
 	throwSnowball(power, directionAngle, elevationAngle) {
-		power = Math.min(1, power + 0.3);
-		const powerFactor = 20;
+		power = Math.min(1, power + 0.5);
+		const powerFactor = 30;
 		const velocity = {
 			x:
 				powerFactor *

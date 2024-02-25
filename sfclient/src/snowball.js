@@ -7,7 +7,7 @@ export default class Snowball {
 		this.game = game;
 		this.id = id;
 
-		this.geometry = new THREE.SphereGeometry(0.4, 32, 32);
+		this.geometry = new THREE.SphereGeometry(0.3, 32, 32);
 		this.material = new THREE.MeshPhongMaterial({ color: 0xffffff });
 		this.visual = new THREE.Mesh(this.geometry, this.material);
 
