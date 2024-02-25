@@ -16,19 +16,19 @@ export default class Scene extends THREE.Scene {
 		this.add(light);
 
 		const light2 = new THREE.DirectionalLight(0xf0f0f0, 1.5);
-		light2.position.set(5, 5, 10);
+		light2.position.set(10, 10, 20);
 		light2.castShadow = true; // enable shadow casting for the directional light
 		light2.shadow.mapSize.width = 2048; // default
 		light2.shadow.mapSize.height = 2048; // default
-		light2.shadow.camera.near = 0.5; // default
-		light2.shadow.camera.far = 50; // default
-		light2.shadow.camera.left = -30;
-		light2.shadow.camera.right = 30;
-		light2.shadow.camera.top = 30;
-		light2.shadow.camera.bottom = -30;
-		this.add(light2);
+		// make the shadow cover the entire ground
+		light2.shadow.camera.left = -50;
+		light2.shadow.camera.right = 50;
+		light2.shadow.camera.top = 50;
+		light2.shadow.camera.bottom = -50;
+		light2.shadow.camera.far = 50;
+		light2.shadow.camera.near = 0.5;
 
-		this.add(new THREE.CameraHelper(light2.shadow.camera));
+		this.add(light2);
 
 		this.traverse(function (object) {
 			if (object.isMesh) {

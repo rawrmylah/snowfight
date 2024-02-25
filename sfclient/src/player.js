@@ -11,6 +11,7 @@ export default class Player {
 		this.geometry.rotateX(Math.PI / 2);
 		this.material = new THREE.MeshPhongMaterial({ color: this.color });
 		this.visual = new THREE.Mesh(this.geometry, this.material);
+		this.visual.castShadow = true;
 	}
 	setPosition(x, y) {
 		this.visual.position.x = x;
