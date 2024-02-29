@@ -4,7 +4,6 @@ import * as THREE from "three";
 import Server from "./server";
 import Game from "./game";
 import Scene from "./scene";
-import Player from "./player";
 import Control from "./control";
 
 const control = new Control();

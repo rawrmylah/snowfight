@@ -27,6 +27,7 @@ export default class Game extends EventEmitter {
 		this.server.on("update_position", (msg) => {
 			console.log(msg);
 			this.players[msg.author].setPosition(msg.position.x, msg.position.y);
+			this.players[msg.author].setRotation(msg.rotation.yaw);
 		});
 		this.server.on("snowball", (msg) => {
 			if (this.snowballs[msg.id]) {
@@ -42,6 +43,10 @@ export default class Game extends EventEmitter {
 				);
 				this.scene.add(this.snowballs[msg.id].visual);
 			}
+		});
+		this.server.on("destroy_snowball", (msg) => {
+			if (!this.snowballs[msg.id]) return;
+			this.snowballs[msg.id].destroy();
 		});
 	}
 	#addPlayer(id, name, color) {
@@ -92,10 +97,5 @@ export default class Game extends EventEmitter {
 			},
 			velocity,
 		});
-	}
-	destroySnowball(snowball) {
-		this.scene.remove(this.visual);
-		snowball.destroy();
-		delete this.snowballs[snowball.id];
 	}
 }

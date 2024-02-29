@@ -24,6 +24,12 @@ export default class Player {
 		this.yaw = yaw;
 		this.visual.rotation.z = this.yaw;
 	}
+	checkCollision(snowball) {
+		const box = new THREE.Box3().setFromObject(this.visual);
+		const sphere = new THREE.Sphere(snowball.visual.position, snowball.size);
+
+		return box.intersectsSphere(sphere);
+	}
 }
 
 export class SelfPlayer extends Player {
@@ -53,6 +59,9 @@ export class SelfPlayer extends Player {
 					position: {
 						x: this.visual.position.x,
 						y: this.visual.position.y,
+					},
+					rotation: {
+						yaw: this.yaw,
 					},
 				});
 			}
